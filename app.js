@@ -16,9 +16,11 @@ app
 
 // Importamos modulos
 const r_example = require('./src/modules/example/r_example');
+const r_auth = require('./src/modules/auth/r_auth');
 // Establecemos las rutas
 app
 .use('/example', r_example)
+.use('/auth', r_auth)
 
 
 app.listen(process.env.PORT, () => {
