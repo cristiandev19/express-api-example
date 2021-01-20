@@ -2,11 +2,8 @@ const auth_utils = require('./auth_utils');
 
 exports.loginEmail = (req, res) => {
   try {
-    console.log('req.body', req.body);
     const { email, password } = req.body;
-    const data = { email, isLoged: true }
-    const result = auth_utils.signToken(data);
-    console.log("🚀 ~ file: c_auth.js ~ line 11 ~ result", result)
+    const result = auth_utils.signToken({ email, isLoged: true });
     
     res.status(200).send({
       msj: 'Ingreso existoso',
@@ -31,7 +28,6 @@ exports.verifyLogin = (req, res) => {
       msj: result.msj
     });
   } catch (error) {
-    console.log("🚀 ~ file: c_auth.js ~ line 35 ~ error", error)
     res.status(500).send({
       msj: error.message || 'Hubo un problema',
       error
