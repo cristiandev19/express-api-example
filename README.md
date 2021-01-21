@@ -23,3 +23,7 @@ fetch("http://localhost:8089/protected", {
   console.error(err);
 });
 ```
+
+## Contribuidores
+- Cristian Sotomayor
+
