@@ -10,10 +10,7 @@ exports.loginEmail = (req, res) => {
       token: result
     });
   } catch (error) {
-    res.status(500).send({
-      msj: 'Hubo un problema',
-      error
-    });
+    next(error);
   }
 }
 
@@ -28,9 +25,6 @@ exports.verifyLogin = (req, res) => {
       msj: result.msj
     });
   } catch (error) {
-    res.status(500).send({
-      msj: error.message || 'Hubo un problema',
-      error
-    });
+    next(error);
   }
 }

@@ -2,17 +2,20 @@ const express    = require('express'),
       app        = express(),
       cors       = require('cors'),
       bodyParser = require('body-parser'),
-      { dbConnection } = require('./src/database/config');
-
-require('dotenv').config();
+      { dbConnection } = require('./src/databases/mongodb'),
+      { config } = require('./src/config/index');
 
 //passport stuff
-const passport = require('passport');
-const jwtStrategry  = require('./src/strategies/jwt');
+const passport      = require('passport'),
+      jwtStrategry  = require('./src/strategies/jwt');
 passport.use(jwtStrategry);
 
 // Hacemos la conexion a mongodb
 dbConnection();
+
+// Importamos los middlewares para manejar los errores
+const { logErrors, errorHandler } = require('./src/utils/middleware/errorHandler');
+
 // Aqui configuraciones
 app
   .use(cors({ 'origin': '*' }))
@@ -26,13 +29,13 @@ const r_auth = require('./src/modules/auth/r_auth');
 app
   .use('/example', r_example)
   .use('/auth', r_auth);
+  
+// Middleware para manejo de errores
+app
+  .use(logErrors)
+  .use(errorHandler);
 
-// Ejemplo de ruta protegida
-app.get('/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
-    return res.status(200).send('YAY! this is a protected Route')
-})
 
-
-app.listen(process.env.PORT, () => {
-console.log(`Example app listening at http://localhost:${process.env.PORT}`);
+app.listen(config.port, () => {
+  console.log(`Example app listening at http://localhost:${config.port}`);
 });
