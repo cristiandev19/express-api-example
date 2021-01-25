@@ -16,6 +16,9 @@ dbConnection();
 // Importamos los middlewares para manejar los errores
 const { logErrors, errorHandler } = require('./src/utils/middleware/errorHandler');
 
+
+
+
 // Aqui configuraciones
 app
   .use(cors({ 'origin': '*' }))
@@ -27,6 +30,10 @@ const r_example = require('./src/modules/example/r_example');
 const r_auth = require('./src/modules/auth/r_auth');
 // Establecemos las rutas
 app
+  .use(function timeLog(req, res, next) {
+    console.log(`url: ${req.originalUrl} - Time: ${Date.now()}`);
+    next();
+  })
   .use('/example', r_example)
   .use('/auth', r_auth);
   
@@ -34,7 +41,6 @@ app
 app
   .use(logErrors)
   .use(errorHandler);
-
 
 app.listen(config.port, () => {
   console.log(`Example app listening at http://localhost:${config.port}`);
