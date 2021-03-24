@@ -1,15 +1,21 @@
 const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
-const opts = {}
+const { ExtractJwt } = require('passport-jwt');
+const User = require('../models/User');
+const { config } = require('../config/index');
+
+const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.JWT_SECRET_KEY; //normally store this in process.env.secret
+opts.secretOrKey = config.authJwtSecret; // normally store this in process.env.secret
 
 // Aqui debemos cambiarlo para que llame a la BD por un id dentro del token
-module.exports = new JwtStrategy(opts, (jwt_payload, done) => {
-  if (jwt_payload.email === "paul@nanosoft.co.za") {
-    return done(null, true)
-  } else if (jwt_payload.email === 'cristiansotomayor.dev@gmail.com') {
-    return done(null, true)
-  }
-  return done(null, false)
-}) 
+module.exports = new JwtStrategy(opts, (jwtPayload, done) => {
+  User.findOne({ _id: jwtPayload.sub }, (err, user) => {
+    if (err) {
+      return done(err);
+    }
+    if (!user) {
+      return done(null, false);
+    }
+    return done(null, user);
+  });
+});
