@@ -4,8 +4,12 @@
 Esta es el ejemplo de un backend hecho en express usando:
 - Mongoose
 - Passport
-- JWT 
+- JWT
+- Eslint
 
+## Como usar Eslint
+
+[Eslint](https://eslint.org/docs/user-guide/getting-started)
 
 ## Ejemplo de peticion HTTP por JS con Bearer
 ```js
